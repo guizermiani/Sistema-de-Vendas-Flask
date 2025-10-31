@@ -1,0 +1,22 @@
+ <div class="Table">
+                <article>
+                    <h2 id="productsComparative">Tabela de Categorias</h2>
+                    <form action="#" method="post" aria-label="tabela de categorias">
+                        <table border="1">
+                            <caption>Tabela de Categorias</caption>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                </tr>
+                                <tr>
+                                    {% for categoria in categorias %}
+                                    <tr>
+                                        <td>{{ categoria[0] }}</td>
+                                        <td>{{ categoria[1] }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
