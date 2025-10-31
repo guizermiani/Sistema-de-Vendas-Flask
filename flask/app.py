@@ -37,7 +37,7 @@ def salvar_categoria():
         conexao = conecta_db()
         inserir(conexao,nome)
         
-        return f"<h2>Categoria '{nome}' salva com sucesso!</h2>"
+        return f"<h2>Categoria "{nome}"" salva com sucesso!</h2>"
     return render_template("categoria-form.html")
 
 if __name__ == '__main__':
