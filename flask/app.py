@@ -10,6 +10,49 @@ def principal():
     return render_template("index.html", nome=nome)
 
 
+@app.route("/salvar-categoria", methods=["GET", "POST"])
+def salvar_categoria():
+    conexao = conecta_db()
+    if request.method == "POST":
+        nome = request.form['nome']
+        if not nome:
+            return "<h3>Por favor, preencha o nome da categoria.</h3>"
+        
+        conexao = conecta_db()
+        inserir(conexao,nome)
+        
+        return f"<h2>Categoria ",{nome}," salva com sucesso!</h2>"
+    return render_template("categoria-form.html")
+
+@app.route("/deletar-categoria", methods=["POST", "GET"])
+def deletar_categoria():
+    if request.method == "POST":
+        id_categoria = request.form['id']
+        
+        conexao = conecta_db()
+        cursor = conexao.cursor()
+        cursor.execute("DELETE FROM categoria WHERE id = %s", (id_categoria,))
+        
+        conexao.commit()
+        
+        return "Categoria excluída com sucesso!"
+    return render_template("categoria-delete.html")
+    
+
+    
+    
+
+            
+        
+   
+        
+            
+    
+        
+
+
+
+
 @app.route("/listar-categoria", methods=["GET"])
 def listar_categoria():
     cursor = conecta_db().cursor()
@@ -25,20 +68,8 @@ def listar_categoria():
 
 
 
-
-@app.route("/salvar-categoria", methods=["GET", "POST"])
-def salvar_categoria():
-    conexao = conecta_db()
-    if request.method == "POST":
-        nome = request.form['nome']
-        if not nome:
-            return "<h3>Por favor, preencha o nome da categoria.</h3>"
-        
-        conexao = conecta_db()
-        inserir(conexao,nome)
-        
-        return f"<h2>Categoria "{nome}"" salva com sucesso!</h2>"
-    return render_template("categoria-form.html")
+    
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
