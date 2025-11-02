@@ -37,21 +37,6 @@ def deletar_categoria():
         
         return "Categoria excluída com sucesso!"
     return render_template("categoria-delete.html")
-    
-
-    
-    
-
-            
-        
-   
-        
-            
-    
-        
-
-
-
 
 @app.route("/listar-categoria", methods=["GET"])
 def listar_categoria():
@@ -66,7 +51,29 @@ def listar_categoria():
     
     return render_template("categoria-list.html", categorias=registros)
 
+@app.route("/consultar-categoria", methods=["GET"])
+def consultar_categoria():
+    if request.method == "GET": 
+        id = request.args.get("id")
 
+        conexao = conecta_db()
+        cursor = conexao.cursor()
+        cursor.execute("SELECT * FROM categoria WHERE id = %s", (id,))
+        registro = cursor.fetchone()
+        
+
+    return render_template("consultar-categoria-form.html", registro=registro)
+
+    
+        
+    
+        
+        
+        
+
+    
+    
+    
 
     
     
