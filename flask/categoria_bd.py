@@ -17,13 +17,13 @@ def consultar_categoria_por_id(conexao):
     registro = cursor.fetchone()
 
     if registro is None:
-        print("Categoria não encontrado:")
+        print("Categoria não encontrada :")
     else:
         print(f"| ID ..: {registro[0]} ")
         print(f"| Nome : {registro[1]} ")
 
 
-def inserir(conexao, nome):
+def inserir_categoria(conexao, nome):
     cursor = conexao.cursor()
     sql_insert = "insert into categoria (nome) values ('" + nome + "')"
     cursor.execute(sql_insert)

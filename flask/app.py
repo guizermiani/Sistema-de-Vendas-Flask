@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from conexao import conecta_db
-from categoria import inserir
+from categoria_bd import inserir_categoria
+from cliente_bd import inserir_cliente, listar_clientes_bd
 
 app = Flask(__name__)
 
@@ -9,20 +10,42 @@ def principal():
     nome = "Guilherme Zermiani"
     return render_template("index.html", nome=nome)
 
-
-@app.route("/salvar-categoria", methods=["GET", "POST"])
-def salvar_categoria():
-    conexao = conecta_db()
-    if request.method == "POST":
-        nome = request.form['nome']
+@app.route('/cliente', methods=['GET', 'POST'])
+def salvar_cliente():
+     if request.method == 'POST':
+        nome = request.form.get('nome')
+        celular = request.form.get('celular')
+        email = request.form.get('email')
+        cpf_cnpj = request.form.get('cpf_cnpj')
+        
         if not nome:
-            return "<h3>Por favor, preencha o nome da categoria.</h3>"
+            return "<h3> Por favor, preencha todos os campos</h3"
         
         conexao = conecta_db()
-        inserir(conexao,nome)
+        inserir_cliente(conexao,nome, celular, email, cpf_cnpj)
+
+        return f"<h2> Cliente Salvo com Sucesso:  {nome} </h2>"
+     return render_template("cliente-form.html")
+ 
+@app.route("/listar-clientes", methods=["GET"])
+def listar_clientes():
+    conexao = conecta_db()
+    clientes = listar_clientes_bd(conexao)
+    return render_template("cliente-listar.html", clientes=clientes)
+
+@app.route("/salvar-categoria", methods=['GET','POST'])
+def salvar_categoria():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        if not nome:
+            return "<h3> Por favor, preencha todos os campos</h3"
         
-        return f"<h2>Categoria ",{nome}," salva com sucesso!</h2>"
+        conexao = conecta_db()
+        inserir_categoria(conexao,nome)
+
+        return f"<h2> Categoria Salva com Sucesso:  {nome} </h2>"
     return render_template("categoria-form.html")
+
 
 @app.route("/deletar-categoria", methods=["POST", "GET"])
 def deletar_categoria():
@@ -51,18 +74,10 @@ def listar_categoria():
     
     return render_template("categoria-list.html", categorias=registros)
 
-@app.route("/consultar-categoria", methods=["GET"])
-def consultar_categoria():
-    if request.method == "GET": 
-        id = request.args.get("id")
 
-        conexao = conecta_db()
-        cursor = conexao.cursor()
-        cursor.execute("SELECT * FROM categoria WHERE id = %s", (id,))
-        registro = cursor.fetchone()
-        
 
-    return render_template("consultar-categoria-form.html", registro=registro)
+
+
 
     
         
