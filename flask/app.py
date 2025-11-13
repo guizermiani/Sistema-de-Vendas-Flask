@@ -74,8 +74,53 @@ def listar_categoria():
     
     return render_template("categoria-list.html", categorias=registros)
 
+@app.route("/listar-produtos", methods=["GET"])
+def listar_produtos():
+    cursor = conecta_db().cursor()
+    cursor.execute("SELECT id, nome, valor_venda, estoque, categoria_id FROM produto")
+    registros = cursor.fetchall()
+    
+    resultado = "<h2>Registros da tabela produto:</h2><ul>"
+    for registro in registros:
+        resultado += f"<li>ID: {registro[0]}, Nome: {registro[1]}, Preço: {registro[2]}, Estoque: {registro[3]}, CategoriaID: {registro[4]}</li>"
+    resultado += "</ul>"
+    
+    return render_template("produtos-list.html", produtos=registros)
 
+@app.route("/salvar-produto", methods=['GET','POST'])
+def salvar_produto():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        valor_venda = request.form.get('valor_venda')
+        estoque = request.form.get('estoque')
+        categoria_id = request.form.get('categoria_id')
+        
+        if not nome or not valor_venda or not estoque or not categoria_id:
+            return "<h3> Por favor, preencha todos os campos</h3"
+        
+        conexao = conecta_db()
+        cursor = conexao.cursor()
+        sql_insert = "INSERT INTO produto (nome, valor_venda, estoque, categoria_id) VALUES (%s, %s, %s, %s)"
+        dados = (nome, valor_venda, estoque, categoria_id)
+        cursor.execute(sql_insert, dados)
+        conexao.commit()
 
+        return f"<h2> Produto Salvo com Sucesso:  {nome} </h2>"
+    return render_template("produto-form.html")
+
+@app.route('/deletar-produto', methods=['POST', 'GET'])
+def deletar_produto():
+    if request.method == "POST":
+        id_produto = request.form['id']
+        
+        conexao = conecta_db()
+        cursor = conexao.cursor()
+        cursor.execute("DELETE FROM produto WHERE id = %s", (id_produto))
+        
+        conexao.commit()
+        
+        return "Produto excluído com sucesso!"
+    return render_template("produto-delete.html")
 
 
 

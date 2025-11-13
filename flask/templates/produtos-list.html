@@ -1,0 +1,28 @@
+ <div class="Table">
+                <article>
+                    <h2 id="productsComparative">Tabela de Produtos</h2>
+                    <form action="#" method="post" aria-label="tabela de produtos">
+                        <table border="1">
+                            <caption>Tabela de Produtos</caption>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Preco</th>
+                                    <th>Estoque</th>
+                                    <th>CategoriaID</th>
+                                </tr>
+                                <tr>
+                                    {% for produto in produtos %}
+                                    <tr>
+                                        <td>{{ produto[0] }}</td>
+                                        <td>{{ produto[1] }}</td>
+                                        <td>{{ produto[2] }}</td>
+                                        <td>{{ produto[3] }}</td>
+                                        <td>{{ produto[4] }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
