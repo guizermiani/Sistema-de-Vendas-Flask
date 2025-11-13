@@ -10,6 +10,7 @@ def principal():
     nome = "Guilherme Zermiani"
     return render_template("index.html", nome=nome)
 
+#Cliente
 @app.route('/cliente', methods=['GET', 'POST'])
 def salvar_cliente():
      if request.method == 'POST':
@@ -33,6 +34,8 @@ def listar_clientes():
     clientes = listar_clientes_bd(conexao)
     return render_template("cliente-listar.html", clientes=clientes)
 
+
+#Categoria
 @app.route("/salvar-categoria", methods=['GET','POST'])
 def salvar_categoria():
     if request.method == 'POST':
@@ -45,7 +48,6 @@ def salvar_categoria():
 
         return f"<h2> Categoria Salva com Sucesso:  {nome} </h2>"
     return render_template("categoria-form.html")
-
 
 @app.route("/deletar-categoria", methods=["POST", "GET"])
 def deletar_categoria():
@@ -74,6 +76,7 @@ def listar_categoria():
     
     return render_template("categoria-list.html", categorias=registros)
 
+#Produto
 @app.route("/listar-produtos", methods=["GET"])
 def listar_produtos():
     cursor = conecta_db().cursor()
