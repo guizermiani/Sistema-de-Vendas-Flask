@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from conexao import conecta_db
 from categoria_bd import inserir_categoria
 from cliente_bd import inserir_cliente, listar_clientes_bd
@@ -6,7 +6,7 @@ from cliente_bd import inserir_cliente, listar_clientes_bd
 app = Flask(__name__)
 
 @app.route('/')
-def principal():
+def home():
     nome = "Guilherme Zermiani"
     return render_template("index.html", nome=nome)
 
@@ -33,7 +33,6 @@ def listar_clientes():
     conexao = conecta_db()
     clientes = listar_clientes_bd(conexao)
     return render_template("cliente-listar.html", clientes=clientes)
-
 
 #Categoria
 @app.route("/salvar-categoria", methods=['GET','POST'])
@@ -64,7 +63,7 @@ def deletar_categoria():
     return render_template("categoria-delete.html")
 
 @app.route("/listar-categoria", methods=["GET"])
-def listar_categoria():
+def categoria_listar():
     cursor = conecta_db().cursor()
     cursor.execute("SELECT id, nome FROM categoria")
     registros = cursor.fetchall()
@@ -125,21 +124,9 @@ def deletar_produto():
         return "Produto excluído com sucesso!"
     return render_template("produto-delete.html")
 
-
-
-    
-        
-    
-        
-        
-        
-
-    
-    
-    
-
-    
-    
+@app.route('/categorias/<int:id>/editar', methods=['GET', 'POST'])
+def categorias_editar():
+    return redirect(url_for('categoria_listar'))
 
 if __name__ == '__main__':
     app.run(debug=True)
